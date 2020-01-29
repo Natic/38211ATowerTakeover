@@ -9,14 +9,28 @@ pros::Controller master(pros::E_CONTROLLER_MASTER);
  Motor FrontRight(9);
  Motor BackRight(-10);
  Motor armMotor(-8);
+ Motor intakeL(11);
+ Motor intakeR(-1);
+ pros::Motor Tilter(11, pros::E_MOTOR_GEARSET_36);
 
-okapi::MotorGroup leftDrive({20, 19});
-okapi::MotorGroup rightDrive({9, 10});
+
+okapi::MotorGroup leftDrive({-20, 19});
+okapi::MotorGroup rightDrive({9, -10});
+okapi::MotorGroup Intakes({11,-1});
 
 Controller controller;
 
 ControllerButton armUpButton(ControllerDigital::R2);
 ControllerButton armDownButton(ControllerDigital::R1);
+ControllerButton intakeButton(ControllerDigital::L1);
+ControllerButton outtakeButton(ControllerDigital::L2);
+ControllerButton swapButton(ControllerDigital::L2);
+ControllerButton tilterUpButton(ControllerDigital::X);
+ControllerButton tilterDownButton(ControllerDigital::B);
+ControllerButton tilterUpButtonSlow(ControllerDigital::up);
+ControllerButton tilterDownButtonSlow(ControllerDigital::down);
+
+float driveMode=0;
 
 auto drive = ChassisControllerBuilder()
     .withMotors(leftDrive, rightDrive)
@@ -26,11 +40,36 @@ auto drive = ChassisControllerBuilder()
     .buildOdometry(); // build an odometry chassis
 
 ////////////////////////////////////////////////////////////////////////////
+/*
+
+  Start of functions
+
+*/
 ////////////////////////////////////////////////////////////////////////////
-void tankControl(){
+
+////////////////////////////////////////////////////////////////////////////
+//Swaps between tank and arcade drive schemes
+////////////////////////////////////////////////////////////////////////////
+void driveSwap(){
+  if(swapButton.changedToPressed() && driveMode==0){
+    driveMode=1;
+  }else if(swapButton.changedToPressed() && driveMode==1){
+    driveMode=0;
+  }
+}
+////////////////////////////////////////////////////////////////////////////
+//Controls thee drivee schemes
+////////////////////////////////////////////////////////////////////////////
+void driveControl(){
+  if(driveMode==0){
   // Tank drive with left and right sticks
   drive->getModel()->tank(controller.getAnalog(ControllerAnalog::leftY),
                           controller.getAnalog(ControllerAnalog::rightY));
+  }else if (driveMode==1){
+    // Arcade drive with the left stick.
+  drive->getModel()->arcade(controller.getAnalog(ControllerAnalog::leftY),
+                            controller.getAnalog(ControllerAnalog::rightX));
+  }
 }
 ////////////////////////////////////////////////////////////////////////////
 //Makes the lift go up
@@ -55,7 +94,6 @@ void stopArm(){
 //Maps controller buttons to the lift movements
 ////////////////////////////////////////////////////////////////////////////
 void armControl(){
-  // else, the arm isn't all the way down
   if (armUpButton.isPressed()) {
       liftArm();
   } else if (armDownButton.isPressed()) {
@@ -65,25 +103,93 @@ void armControl(){
   }
 }
 ////////////////////////////////////////////////////////////////////////////
+//Spin intakes forward
 ////////////////////////////////////////////////////////////////////////////
-
-// Chassis Controller - lets us drive the robot around with open- or closed-loop control
-
-/**
- * A callback function for LLEMU's center button.
- *
- * When this callback is fired, it will toggle line 2 of the LCD text between
- * "I was pressed!" and nothing.
- */
-void on_center_button() {
-	static bool pressed = false;
-	pressed = !pressed;
-	if (pressed) {
-		pros::lcd::set_text(2, "I was pressed!");
-	} else {
-		pros::lcd::clear_line(2);
-	}
+void Intake(){
+  Intakes.moveVoltage(12000);
 }
+////////////////////////////////////////////////////////////////////////////
+//Spin intakes outward
+////////////////////////////////////////////////////////////////////////////
+void Outtake(){
+  Intakes.moveVoltage(-6000);
+}
+////////////////////////////////////////////////////////////////////////////
+//Stop intakes
+////////////////////////////////////////////////////////////////////////////
+void stopIntake(){
+  Intakes.moveVoltage(0);
+  Intakes.setBrakeMode(AbstractMotor::brakeMode::coast);
+}
+////////////////////////////////////////////////////////////////////////////
+//Maps controller buttons to intakes
+////////////////////////////////////////////////////////////////////////////
+void intakeControl(){
+  if (intakeButton.isPressed()) {
+      Intake();
+  } else if (outtakeButton.isPressed()) {
+      Outtake();
+  } else {
+     stopIntake();
+  }
+}
+////////////////////////////////////////////////////////////////////////////
+//Moves the tilter forward
+////////////////////////////////////////////////////////////////////////////
+void tiltForward(){
+  Tilter.move_voltage(12000);
+}
+////////////////////////////////////////////////////////////////////////////
+//Moves the tilter backwards
+////////////////////////////////////////////////////////////////////////////
+void tiltBack(){
+  Tilter.move_voltage(-12000);
+}
+////////////////////////////////////////////////////////////////////////////
+//Stops the tilter
+////////////////////////////////////////////////////////////////////////////
+void stopTilter(){
+  Tilter.move_voltage(0);
+  Tilter.set_brake_mode(MOTOR_BRAKE_HOLD);
+}
+////////////////////////////////////////////////////////////////////////////
+//Maps the tilter movements to the controller
+////////////////////////////////////////////////////////////////////////////
+void tilterControl(){
+  if (tilterUpButton.isPressed()) {
+      tiltForward();
+  } else if (tilterDownButton.isPressed()) {
+      tiltBack();
+  } else {
+     stopTilter();
+  }
+}
+////////////////////////////////////////////////////////////////////////////
+//Moves the tilter forward
+////////////////////////////////////////////////////////////////////////////
+void tiltForwardSlow(){
+  Tilter.move_voltage(6000);
+}
+////////////////////////////////////////////////////////////////////////////
+//Moves the tilter backwards
+////////////////////////////////////////////////////////////////////////////
+void tiltBackSlow(){
+  Tilter.move_voltage(-6000);
+}
+////////////////////////////////////////////////////////////////////////////
+//Maps the tilter movements to the controller
+////////////////////////////////////////////////////////////////////////////
+void tilterControlSlow(){
+  if (tilterUpButtonSlow.isPressed()) {
+      tiltForwardSlow();
+  } else if (tilterDownButtonSlow.isPressed()) {
+      tiltBackSlow();
+  } else {
+     stopTilter();
+  }
+}
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -92,10 +198,6 @@ void on_center_button() {
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-	pros::lcd::initialize();
-	pros::lcd::set_text(1, "Hello PROS User!");
-
-	pros::lcd::register_btn1_cb(on_center_button);
 }
 
 /**
@@ -134,11 +236,12 @@ void autonomous() {
 
 void opcontrol() {
 	 while (true) {
-
-     // Chassis Controller - lets us drive the robot around with open- or closed-loop control
-
-        tankControl();
+        driveSwap();
+        driveControl();
         armControl();
+        intakeControl();
+        tilterControl();
+        tilterControlSlow();
 			  pros::delay(10);
 	}
 }
