@@ -4,21 +4,71 @@ using namespace okapi;
 using namespace okapi::literals;
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
-pros::Motor FrontLeft(20, true);
-pros::Motor BackLeft(19);
-pros::Motor FrontRight(9);
-pros::Motor BackRight(10, true);
+ Motor FrontLeft(-20);
+ Motor BackLeft(19);
+ Motor FrontRight(9);
+ Motor BackRight(-10);
+ Motor armMotor(-8);
 
 okapi::MotorGroup leftDrive({20, 19});
 okapi::MotorGroup rightDrive({9, 10});
 
+Controller controller;
+
+ControllerButton armUpButton(ControllerDigital::R2);
+ControllerButton armDownButton(ControllerDigital::R1);
+
+auto drive = ChassisControllerBuilder()
+    .withMotors(leftDrive, rightDrive)
+    // Green gear set, 4 in wheel diam, 11.5 in wheel track
+    .withDimensions(AbstractMotor::gearset::green, {{4_in, 9_in}, imev5GreenTPR})
+    .withOdometry() // use the same scales as the chassis (above)
+    .buildOdometry(); // build an odometry chassis
+
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
+void tankControl(){
+  // Tank drive with left and right sticks
+  drive->getModel()->tank(controller.getAnalog(ControllerAnalog::leftY),
+                          controller.getAnalog(ControllerAnalog::rightY));
+}
+////////////////////////////////////////////////////////////////////////////
+//Makes the lift go up
+////////////////////////////////////////////////////////////////////////////
+void liftArm(){
+  armMotor.moveVoltage(12000);
+}
+////////////////////////////////////////////////////////////////////////////
+//Makes the lift go down
+////////////////////////////////////////////////////////////////////////////
+void lowerArm(){
+   armMotor.moveVoltage(-12000);
+}
+////////////////////////////////////////////////////////////////////////////
+//Stops the lift and makes it hold its position
+////////////////////////////////////////////////////////////////////////////
+void stopArm(){
+  armMotor.moveVoltage(0);
+  armMotor.setBrakeMode(AbstractMotor::brakeMode::hold);
+}
+////////////////////////////////////////////////////////////////////////////
+//Maps controller buttons to the lift movements
+////////////////////////////////////////////////////////////////////////////
+void armControl(){
+  // else, the arm isn't all the way down
+  if (armUpButton.isPressed()) {
+      liftArm();
+  } else if (armDownButton.isPressed()) {
+      lowerArm();
+  } else {
+     stopArm();
+  }
+}
+////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////
 
 // Chassis Controller - lets us drive the robot around with open- or closed-loop control
- auto drive = ChassisControllerBuilder()
-		 .withMotors(leftDrive, rightDrive)
-		 // Green gear set, 4 in wheel diam, 11.5 in wheel track
-		 .withDimensions(AbstractMotor::gearset::green, {{4_in, 9_in}, imev5GreenTPR})
-		 .build();
+
 /**
  * A callback function for LLEMU's center button.
  *
@@ -66,29 +116,29 @@ void disabled() {}
  */
 void competition_initialize() {}
 
-/**
- * Runs the user autonomous code. This function will be started in its own task
- * with the default priority and stack size whenever the robot is enabled via
- * the Field Management System or the VEX Competition Switch in the autonomous
- * mode. Alternatively, this function may be called in initialize or opcontrol
- * for non-competition testing purposes.
- *
- * If the robot is disabled or communications is lost, the autonomous task
- * will be stopped. Re-enabling the robot will restart the task, not re-start it
- * from where it left off.
- */
+void autonomous() {
 
+  // set the state to zero
+  drive->setState({0_in, 0_in, 0_deg});
+  // turn 45 degrees and drive approximately 1.4 ft
+  drive->driveToPoint({1_ft, 1_ft});
+  // turn approximately 45 degrees to end up at 90 degrees
+  drive->turnToAngle(90_deg);
+  // turn approximately -90 degrees to face {5_ft, 0_ft} which is to the north of the robot
+  drive->turnToPoint({5_ft, 0_ft});
+  /*
+	drive->setMaxVelocity(30);
+	drive->moveDistance(12_in); // Drive forward 12 inches
+	drive->turnAngle(90_deg);   // Turn in place 90 degrees*/
+}
 
-/**
- * Runs the operator control code. This function will be started in its own task
- * with the default priority and stack size whenever the robot is enabled via
- * the Field Management System or the VEX Competition Switch in the operator
- * control mode.
- *
- * If no competition control is connected, this function will run immediately
- * following initialize().
- *
- * If the robot is disabled or communications is lost, the
- * operator control task will be stopped. Re-enabling the robot will restart the
- * task, not resume it from where it left off.
- */
+void opcontrol() {
+	 while (true) {
+
+     // Chassis Controller - lets us drive the robot around with open- or closed-loop control
+
+        tankControl();
+        armControl();
+			  pros::delay(10);
+	}
+}
