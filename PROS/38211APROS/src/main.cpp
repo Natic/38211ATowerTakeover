@@ -11,7 +11,7 @@ pros::Controller master(pros::E_CONTROLLER_MASTER);
  Motor armMotor(-8);
  Motor intakeL(11);
  Motor intakeR(-1);
- pros::Motor Tilter(11, pros::E_MOTOR_GEARSET_36);
+ pros::Motor Tilter(18, pros::E_MOTOR_GEARSET_36);
 
 
 okapi::MotorGroup leftDrive({-20, 19});
@@ -24,7 +24,7 @@ ControllerButton armUpButton(ControllerDigital::R2);
 ControllerButton armDownButton(ControllerDigital::R1);
 ControllerButton intakeButton(ControllerDigital::L1);
 ControllerButton outtakeButton(ControllerDigital::L2);
-ControllerButton swapButton(ControllerDigital::L2);
+ControllerButton swapButton(ControllerDigital::A);
 ControllerButton tilterUpButton(ControllerDigital::X);
 ControllerButton tilterDownButton(ControllerDigital::B);
 ControllerButton tilterUpButtonSlow(ControllerDigital::up);
@@ -51,12 +51,12 @@ auto drive = ChassisControllerBuilder()
 //Swaps between tank and arcade drive schemes
 ////////////////////////////////////////////////////////////////////////////
 void driveSwap(){
-  if(swapButton.changedToPressed() && driveMode==0){
+  if(swapButton.isPressed() && driveMode==0){
     driveMode=1;
-  }else if(swapButton.changedToPressed() && driveMode==1){
-    driveMode=0;
+  }else
+  driveMode=0;
   }
-}
+
 ////////////////////////////////////////////////////////////////////////////
 //Controls thee drivee schemes
 ////////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ void driveControl(){
   }else if (driveMode==1){
     // Arcade drive with the left stick.
   drive->getModel()->arcade(controller.getAnalog(ControllerAnalog::leftY),
-                            controller.getAnalog(ControllerAnalog::rightX));
+                            controller.getAnalog(ControllerAnalog::leftX));
   }
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -219,15 +219,17 @@ void disabled() {}
 void competition_initialize() {}
 
 void autonomous() {
-
+  drive->setMaxVelocity(80);
   // set the state to zero
   drive->setState({0_in, 0_in, 0_deg});
   // turn 45 degrees and drive approximately 1.4 ft
-  drive->driveToPoint({1_ft, 1_ft});
+  drive->driveToPoint({2_ft, 0_ft});
   // turn approximately 45 degrees to end up at 90 degrees
-  drive->turnToAngle(90_deg);
+  drive->turnToAngle(-180_deg);
+
+    drive->driveToPoint({2_ft, 3_ft});
   // turn approximately -90 degrees to face {5_ft, 0_ft} which is to the north of the robot
-  drive->turnToPoint({5_ft, 0_ft});
+  //drive->turnToPoint({5_ft, 0_ft});
   /*
 	drive->setMaxVelocity(30);
 	drive->moveDistance(12_in); // Drive forward 12 inches
