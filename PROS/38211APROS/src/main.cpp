@@ -224,10 +224,15 @@ void autonomous() {
   drive->setState({0_in, 0_in, 0_deg});
   // turn 45 degrees and drive approximately 1.4 ft
   drive->driveToPoint({2_ft, 0_ft});
-  // turn approximately 45 degrees to end up at 90 degrees
-  drive->turnToAngle(-180_deg);
 
-    drive->driveToPoint({2_ft, 3_ft});
+  pros::delay(1000);
+  // turn approximately 45 degrees to end up at 90 degrees
+
+  drive->driveToPoint({1_ft, 1_ft});
+
+  //drive->turnToAngle(-180_deg);
+
+  //  drive->driveToPoint({2_ft, 3_ft});
   // turn approximately -90 degrees to face {5_ft, 0_ft} which is to the north of the robot
   //drive->turnToPoint({5_ft, 0_ft});
   /*
