@@ -219,6 +219,9 @@ void disabled() {}
 void competition_initialize() {}
 
 void autonomous() {
+  
+  Intake();
+
   drive->setMaxVelocity(80);
   // set the state to zero
   drive->setState({0_in, 0_in, 0_deg});
