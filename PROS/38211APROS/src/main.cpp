@@ -29,6 +29,7 @@ ControllerButton tilterUpButton(ControllerDigital::X);
 ControllerButton tilterDownButton(ControllerDigital::B);
 ControllerButton tilterUpButtonSlow(ControllerDigital::up);
 ControllerButton tilterDownButtonSlow(ControllerDigital::down);
+ControllerButton tilterSetupButton(ControllerDigital::Y);
 
 float driveMode=0;
 
@@ -164,11 +165,17 @@ void tilterControl(){
      stopTilter();
   }
 }
+
+void tiltMacro(){
+  if(tilterSetupButton.isPressed()){
+    Tilter.move_relative(30, 100);
+  }
+}
 ////////////////////////////////////////////////////////////////////////////
 //Moves the tilter forward
 ////////////////////////////////////////////////////////////////////////////
-void tiltForwardSlow(){
-  Tilter.move_voltage(6000);
+/*void tiltForwardSlow(){
+  Tilter.moveVoltage(6000);
 }
 ////////////////////////////////////////////////////////////////////////////
 //Moves the tilter backwards
@@ -187,7 +194,7 @@ void tilterControlSlow(){
   } else {
      stopTilter();
   }
-}
+}*/
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
@@ -219,20 +226,39 @@ void disabled() {}
 void competition_initialize() {}
 
 void autonomous() {
-  
+
+  liftArm();
+  Outtake();
+  tiltForward();
+  pros::delay(400);
+  tiltBack();
+  pros::delay(500);
+  lowerArm();
+  pros::delay(1200);
+  stopArm();
   Intake();
 
-  drive->setMaxVelocity(80);
+  drive->setMaxVelocity(50);
   // set the state to zero
   drive->setState({0_in, 0_in, 0_deg});
   // turn 45 degrees and drive approximately 1.4 ft
-  drive->driveToPoint({2_ft, 0_ft});
+  drive->driveToPoint({5.5_ft, 0_ft});
 
-  pros::delay(1000);
+  pros::delay(300);
   // turn approximately 45 degrees to end up at 90 degrees
+  drive->setMaxVelocity(30);
 
-  drive->driveToPoint({1_ft, 1_ft});
+  drive->turnToAngle(45_deg);
 
+  pros::delay(200);
+
+  drive->setState({0_in, 0_in, 0_deg});
+
+  drive->driveToPoint({3_ft, 0_ft});
+
+  tiltForward();
+
+  pros::delay(2000);
   //drive->turnToAngle(-180_deg);
 
   //  drive->driveToPoint({2_ft, 3_ft});
@@ -251,7 +277,8 @@ void opcontrol() {
         armControl();
         intakeControl();
         tilterControl();
-        tilterControlSlow();
+        tiltMacro();
+        //tilterControlSlow();
 			  pros::delay(10);
 	}
 }

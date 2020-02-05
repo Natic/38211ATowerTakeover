@@ -287,6 +287,11 @@
                 "version": "4.0.2"
             }
         },
-        "upload_options": {}
+        "upload_options": {
+            "compress_bin": true,
+            "description": "like Bruh",
+            "remote_name": "38211APros",
+            "slot": 7
+        }
     }
 }
