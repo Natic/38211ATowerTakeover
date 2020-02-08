@@ -176,10 +176,7 @@ void tiltMacro(){
   }
 }
 
-
-
-void deployMacro(){
-  if (deployButton.isPressed()){
+void deploy(){
   Intakes.moveVoltage(-12000);
   liftArm();
   tiltForward();
@@ -190,6 +187,11 @@ void deployMacro(){
   stopTilter();
   stopIntake();
   stopArm();
+}
+
+void deployMacro(){
+  if (deployButton.isPressed()){
+    deploy();
 }
 }
 
@@ -250,16 +252,7 @@ void competition_initialize() {}
 
 void autonomous() {
 
-  liftArm();
-  Outtake();
-  tiltForward();
-  pros::delay(400);
-  tiltBack();
-  pros::delay(500);
-  lowerArm();
-  pros::delay(1200);
-  stopArm();
-  Intake();
+  deploy();
 
   drive->setMaxVelocity(50);
   // set the state to zero
