@@ -34,6 +34,8 @@ ControllerButton deployButton(ControllerDigital::left);
 
 float driveMode=0;
 
+float deployMode=0;
+
 auto drive = ChassisControllerBuilder()
     .withMotors(leftDrive, rightDrive)
     // Green gear set, 4 in wheel diam, 11.5 in wheel track
@@ -175,13 +177,23 @@ void tiltMacro(){
 }
 
 
-void deploy(){
-  if(deployButton.isPressed()){
-      liftArm();
-      tiltForward();
-      Intakes.moveVoltage(-12000);
-  }
+
+void deployMacro(){
+  if (deployButton.isPressed()){
+  Intakes.moveVoltage(-12000);
+  liftArm();
+  tiltForward();
+  pros::delay(1000);
+  tiltBack();
+  lowerArm();
+  pros::delay(1000);
+  stopTilter();
+  stopIntake();
+  stopArm();
 }
+}
+
+
 ////////////////////////////////////////////////////////////////////////////
 //Moves the tilter forward
 ////////////////////////////////////////////////////////////////////////////
@@ -283,7 +295,7 @@ void autonomous() {
 
 void opcontrol() {
 	 while (true) {
-        deploy();
+        deployMacro();
         driveSwap();
         driveControl();
         armControl();
