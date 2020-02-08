@@ -30,6 +30,7 @@ ControllerButton tilterDownButton(ControllerDigital::B);
 ControllerButton tilterUpButtonSlow(ControllerDigital::up);
 ControllerButton tilterDownButtonSlow(ControllerDigital::down);
 ControllerButton tilterSetupButton(ControllerDigital::Y);
+ControllerButton deployButton(ControllerDigital::left);
 
 float driveMode=0;
 
@@ -47,6 +48,7 @@ auto drive = ChassisControllerBuilder()
 
 */
 ////////////////////////////////////////////////////////////////////////////
+
 
 ////////////////////////////////////////////////////////////////////////////
 //Swaps between tank and arcade drive schemes
@@ -171,6 +173,15 @@ void tiltMacro(){
     Tilter.move_relative(30, 100);
   }
 }
+
+
+void deploy(){
+  if(deployButton.isPressed()){
+      liftArm();
+      tiltForward();
+      Intakes.moveVoltage(-12000);
+  }
+}
 ////////////////////////////////////////////////////////////////////////////
 //Moves the tilter forward
 ////////////////////////////////////////////////////////////////////////////
@@ -272,6 +283,7 @@ void autonomous() {
 
 void opcontrol() {
 	 while (true) {
+        deploy();
         driveSwap();
         driveControl();
         armControl();
