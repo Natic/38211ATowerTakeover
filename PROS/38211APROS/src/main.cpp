@@ -237,24 +237,26 @@ void autonomous() {
   drive->setMaxVelocity(50);
   // set the state to zero
   drive->setState({0_in, 0_in, 0_deg});
-  // turn 45 degrees and drive approximately 1.4 ft
+  //move forward and intake 8 cubes
   drive->driveToPoint({5.5_ft, 0_ft});
 
   pros::delay(300);
-  // turn approximately 45 degrees to end up at 90 degrees
-  drive->setMaxVelocity(30);
 
+  drive->setMaxVelocity(30);
+  // turn to face small goal
   drive->turnToAngle(45_deg);
 
   pros::delay(200);
 
   drive->setState({0_in, 0_in, 0_deg});
-
+  //drive to smaLL goal
   drive->driveToPoint({3_ft, 0_ft});
-
+  //deploy cubes
   tiltForward();
 
   pros::delay(2000);
+
+  stopTilter();
   //drive->turnToAngle(-180_deg);
 
   //  drive->driveToPoint({2_ft, 3_ft});
