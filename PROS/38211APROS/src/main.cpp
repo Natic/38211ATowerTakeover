@@ -117,7 +117,7 @@ void Intake(){
 //Spin intakes outward
 ////////////////////////////////////////////////////////////////////////////
 void Outtake(){
-  Intakes.moveVoltage(-6000);
+  Intakes.moveVoltage(-8500);
 }
 ////////////////////////////////////////////////////////////////////////////
 //Stop intakes
@@ -203,6 +203,228 @@ void deployMacro(){
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
+void skills(){
+  deploy();
+
+  drive->setMaxVelocity(50);
+  // set the state to zero
+  drive->setState({0_in, 0_in, 0_deg});
+  //move forward and intake 8 cubes
+  drive->driveToPoint({5.5_ft, 0_ft});
+
+  pros::delay(300);
+
+  drive->setMaxVelocity(30);
+  // turn to face small goal
+  drive->turnToAngle(45_deg);
+
+  pros::delay(200);
+
+  drive->setState({0_in, 0_in, 0_deg});
+  //drive to smaLL goal
+  drive->driveToPoint({3_ft, 0_ft});
+  //deploy cubes
+  tiltForward();
+
+  pros::delay(2000);
+
+  stopTilter();
+}
+void blueFront(){
+    deploy();
+
+    Intake();
+
+    drive->setMaxVelocity(60);
+    // set the state to zero
+    //drive->setState({0_in, 0_in, 0_deg});
+    //move forward and intake 8 cubes
+    drive->moveDistance(30_in);
+
+    pros::delay(300);
+
+    //drive->driveToPoint({1_ft, 0_ft});
+    drive->moveDistance(-15_in);
+
+    drive->setMaxVelocity(30);
+    // turn to face small goal
+    //drive->turnToAngle(-45_deg);
+    drive->turnAngle(-130_deg);
+
+    pros::delay(200);
+
+    //drive->setState({0_in, 0_in, 0_deg});
+    //drive to smaLL goal
+    //drive->driveToPoint({3_ft, 0_ft});
+    //deploy cubes
+    leftDrive.moveVoltage(6000);
+    rightDrive.moveVoltage(6000);
+    pros::delay(700);
+
+    leftDrive.moveVoltage(0);
+    rightDrive.moveVoltage(0);
+
+    stopIntake();
+    Outtake();
+    pros::delay(300);
+    stopIntake();
+    tiltForward();
+
+    pros::delay(3000);
+
+    stopTilter();
+
+    Outtake();
+    drive->moveDistance(-10_in);
+}
+
+void redFront(){
+  deploy();
+
+  Intake();
+
+  drive->setMaxVelocity(60);
+  // set the state to zero
+  //drive->setState({0_in, 0_in, 0_deg});
+  //move forward and intake 8 cubes
+  drive->moveDistance(30_in);
+
+  pros::delay(300);
+
+  //drive->driveToPoint({1_ft, 0_ft});
+  drive->moveDistance(-15_in);
+
+  drive->setMaxVelocity(30);
+  // turn to face small goal
+  //drive->turnToAngle(-45_deg);
+  drive->turnAngle(132_deg);
+
+  pros::delay(200);
+
+  //drive->setState({0_in, 0_in, 0_deg});
+  //drive to smaLL goal
+  //drive->driveToPoint({3_ft, 0_ft});
+  //deploy cubes
+  leftDrive.moveVoltage(6000);
+  rightDrive.moveVoltage(6000);
+  pros::delay(700);
+
+  leftDrive.moveVoltage(0);
+  rightDrive.moveVoltage(0);
+
+  stopIntake();
+  Outtake();
+  pros::delay(300);
+  stopIntake();
+  tiltForward();
+
+  pros::delay(3000);
+
+  stopTilter();
+
+  Outtake();
+  drive->moveDistance(-10_in);
+}
+
+void blueBack(){
+  deploy();
+
+  Intake();
+
+  drive->setMaxVelocity(40);
+  // set the state to zero
+  //drive->setState({0_in, 0_in, 0_deg});
+  //move forward and intake 8 cubes
+  drive->moveDistance(15_in);
+
+  pros::delay(300);
+
+  //drive->driveToPoint({1_ft, 0_ft});
+
+  drive->setMaxVelocity(30);
+  // turn to face small goal
+  //drive->turnToAngle(-45_deg);
+  drive->turnAngle(90_deg);
+
+  pros::delay(300);
+
+  drive->moveDistance(15_in);
+
+  pros::delay(200);
+
+  drive->moveDistance(-3_in);
+
+  pros::delay(100);
+
+  drive->turnAngle(30_deg);
+
+  pros::delay(200);
+
+  leftDrive.moveVoltage(4000);
+  rightDrive.moveVoltage(4000);
+  pros::delay(600);
+  leftDrive.moveVoltage(0);
+  rightDrive.moveVoltage(0);
+
+  Outtake();
+
+}
+void redBack(){
+  deploy();
+
+  Intake();
+
+  drive->setMaxVelocity(40);
+  // set the state to zero
+  //drive->setState({0_in, 0_in, 0_deg});
+  //move forward and intake 8 cubes
+  drive->moveDistance(15_in);
+
+  pros::delay(300);
+
+  //drive->driveToPoint({1_ft, 0_ft});
+
+  drive->setMaxVelocity(30);
+  // turn to face small goal
+  //drive->turnToAngle(-45_deg);
+  drive->turnAngle(-90_deg);
+
+  pros::delay(300);
+
+  drive->moveDistance(15_in);
+
+  pros::delay(200);
+
+  drive->moveDistance(-3_in);
+
+  pros::delay(100);
+
+  drive->turnAngle(-30_deg);
+
+  pros::delay(200);
+
+  leftDrive.moveVoltage(4000);
+  rightDrive.moveVoltage(4000);
+  pros::delay(600);
+  leftDrive.moveVoltage(0);
+  rightDrive.moveVoltage(0);
+
+  Outtake();
+
+}
+
+void pushcube(){
+  leftDrive.moveVoltage(-6000);
+  rightDrive.moveVoltage(-6000);
+  pros::delay(3000);
+  leftDrive.moveVoltage(0);
+  rightDrive.moveVoltage(0);
+  leftDrive.moveVoltage(6000);
+  rightDrive.moveVoltage(6000);
+  pros::delay(2000);
+  leftDrive.moveVoltage(0);
+  rightDrive.moveVoltage(0);
+}
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -232,31 +454,14 @@ void competition_initialize() {}
 
 void autonomous() {
 
-  deploy();
+  //blueFront();
+  //redFront();
+  //blueBack();
+  //redBack();
+  pushcube();
 
-  drive->setMaxVelocity(50);
-  // set the state to zero
-  drive->setState({0_in, 0_in, 0_deg});
-  //move forward and intake 8 cubes
-  drive->driveToPoint({5.5_ft, 0_ft});
 
-  pros::delay(300);
 
-  drive->setMaxVelocity(30);
-  // turn to face small goal
-  drive->turnToAngle(45_deg);
-
-  pros::delay(200);
-
-  drive->setState({0_in, 0_in, 0_deg});
-  //drive to smaLL goal
-  drive->driveToPoint({3_ft, 0_ft});
-  //deploy cubes
-  tiltForward();
-
-  pros::delay(2000);
-
-  stopTilter();
   //drive->turnToAngle(-180_deg);
 
   //  drive->driveToPoint({2_ft, 3_ft});

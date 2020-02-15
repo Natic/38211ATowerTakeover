@@ -290,8 +290,8 @@
         "upload_options": {
             "compress_bin": true,
             "description": "like Bruh",
-            "remote_name": "38211APros",
-            "slot": 7
+            "remote_name": "pushCube",
+            "slot": 5
         }
     }
 }
