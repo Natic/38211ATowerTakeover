@@ -369,6 +369,76 @@ void blueBack(){
   Outtake();
 
 }
+void Skills(){
+    deploy();
+
+    Intake();
+
+    drive->setMaxVelocity(60);
+    // set the state to zero
+    //drive->setState({0_in, 0_in, 0_deg});
+    //move forward and intake 8 cubes
+    drive->moveDistance(30_in);
+
+    pros::delay(300);
+
+    //drive->driveToPoint({1_ft, 0_ft});
+    drive->moveDistance(-15_in);
+
+    drive->setMaxVelocity(30);
+    // turn to face small goal
+    //drive->turnToAngle(-45_deg);
+    drive->turnAngle(-130_deg);
+
+    pros::delay(200);
+
+    //drive->setState({0_in, 0_in, 0_deg});
+    //drive to smaLL goal
+    //drive->driveToPoint({3_ft, 0_ft});
+    //deploy cubes
+    leftDrive.moveVoltage(6000);
+    rightDrive.moveVoltage(6000);
+    pros::delay(700);
+
+    leftDrive.moveVoltage(0);
+    rightDrive.moveVoltage(0);
+
+    stopIntake();
+    Outtake();
+    pros::delay(300);
+    stopIntake();
+    tiltForward();
+
+    pros::delay(3000);
+
+    stopTilter();
+
+    Outtake();
+    drive->moveDistance(-10_in);
+
+    pros::delay(300);
+
+    tiltBack();
+
+    pros::delay(1000);
+
+    stopTilter();
+
+    drive->turnAngle(-130_deg);
+
+    drive->moveDistance(20_in);
+
+    Intake();
+
+    pros::delay(400);
+
+    stopIntake();
+
+    drive->moveDistance(-5_in);
+
+
+}
+
 void redBack(){
   deploy();
 
@@ -458,8 +528,8 @@ void autonomous() {
   //redFront();
   //blueBack();
   //redBack();
-  pushcube();
-
+  //pushcube();
+  Skills();
 
 
   //drive->turnToAngle(-180_deg);
