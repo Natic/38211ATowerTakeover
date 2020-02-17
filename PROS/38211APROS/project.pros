@@ -290,8 +290,8 @@
         "upload_options": {
             "compress_bin": true,
             "description": "like Bruh",
-            "remote_name": "skills",
-            "slot": 7
+            "remote_name": "blueBackNew",
+            "slot": 4
         }
     }
 }

@@ -119,6 +119,10 @@ void Intake(){
 void Outtake(){
   Intakes.moveVoltage(-8500);
 }
+
+void slowOuttake(){
+  Intakes.moveVoltage(-4000);
+}
 ////////////////////////////////////////////////////////////////////////////
 //Stop intakes
 ////////////////////////////////////////////////////////////////////////////
@@ -188,6 +192,19 @@ void deploy(){
   tiltBack();
   lowerArm();
   pros::delay(1000);
+  stopTilter();
+  stopIntake();
+  stopArm();
+}
+
+void deployBack(){
+  Intakes.moveVoltage(-12000);
+  liftArm();
+  tiltForward();
+  pros::delay(1000);
+  tiltBack();
+  lowerArm();
+  pros::delay(700);
   stopTilter();
   stopIntake();
   stopArm();
@@ -438,6 +455,50 @@ void Skills(){
 
 
 }
+void blueBackNew(){
+  deployBack();
+
+  Intake();
+
+  drive->setMaxVelocity(60);
+  // set the state to zero
+  //drive->setState({0_in, 0_in, 0_deg});
+  //move forward and intake 8 cubes
+
+  drive->moveDistance(15_in);
+
+  //drive->driveToPoint({1_ft, 0_ft});
+  drive->setMaxVelocity(50);
+  // turn to face small goal
+  //drive->turnToAngle(-45_deg);
+  drive->turnAngle(-80_deg);
+
+  pros::delay(100);
+
+  drive->moveDistance(11_in);
+  //tiltForward();
+  drive->moveDistance(-2_in);
+  //stopTilter();
+  drive->turnAngle(168_deg);
+
+  pros::delay(100);
+  drive->setMaxVelocity(60);
+  drive->moveDistance(25_in);
+  //slowOuttake();
+  tiltForward();
+  drive->setMaxVelocity(50);
+  drive->turnAngle(45_deg);
+  slowOuttake();
+  leftDrive.moveVoltage(3000);
+  rightDrive.moveVoltage(3000);
+  pros::delay(400);
+  stopIntake();
+  pros::delay(1000);
+  Outtake();
+  leftDrive.moveVoltage(-4000);
+  rightDrive.moveVoltage(-4000);
+
+}
 
 void redBack(){
   deploy();
@@ -529,7 +590,8 @@ void autonomous() {
   //blueBack();
   //redBack();
   //pushcube();
-  Skills();
+  //Skills();
+  blueBackNew();
 
 
   //drive->turnToAngle(-180_deg);
