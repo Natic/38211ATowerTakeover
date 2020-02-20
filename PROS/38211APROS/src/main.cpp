@@ -2,6 +2,7 @@
 #include "okapi/api.hpp"
 using namespace okapi;
 using namespace okapi::literals;
+#define IMU_PORT 12
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
  Motor FrontLeft(-20);
@@ -13,6 +14,7 @@ pros::Controller master(pros::E_CONTROLLER_MASTER);
  Motor intakeR(-1);
  pros::Motor Tilter(18, pros::E_MOTOR_GEARSET_36);
 
+pros::Imu imu_sensor(IMU_PORT);
 
 okapi::MotorGroup leftDrive({-20, 19});
 okapi::MotorGroup rightDrive({9, -10});
@@ -217,8 +219,28 @@ void deployMacro(){
     deploy();
 }
 }
+
+
+void turnIMU(int left, int right, int value){
+    while(fabs(imu_sensor.get_rotation() < value)){
+        leftDrive.moveVoltage(left);
+        rightDrive.moveVoltage(right);
+        pros::delay(1);
+    }
+    leftDrive.moveVoltage(0);
+    rightDrive.moveVoltage(0);
+    leftDrive.setBrakeMode(AbstractMotor::brakeMode::hold);
+    rightDrive.setBrakeMode(AbstractMotor::brakeMode::hold);
+}
 ////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
+void test(){
+while(fabs(imu_sensor.is_calibrating()== true)){
+  pros::delay(10);
+}
+  turnIMU(6000, -6000, -50);
+}
+
 
 void skills(){
   deploy();
@@ -391,7 +413,7 @@ void Skills(){
 
     Intake();
 
-    drive->setMaxVelocity(60);
+    drive->setMaxVelocity(40);
     // set the state to zero
     //drive->setState({0_in, 0_in, 0_deg});
     //move forward and intake 8 cubes
@@ -399,60 +421,79 @@ void Skills(){
 
     pros::delay(300);
 
-    //drive->driveToPoint({1_ft, 0_ft});
-    drive->moveDistance(-15_in);
+    drive->setMaxVelocity(20);
+    drive->turnAngle(-37_deg);
 
-    drive->setMaxVelocity(30);
-    // turn to face small goal
-    //drive->turnToAngle(-45_deg);
-    drive->turnAngle(-130_deg);
+    drive->setMaxVelocity(40);
+    drive->moveDistance(-25_in);
 
-    pros::delay(200);
+    drive->setMaxVelocity(20);
+    drive->turnAngle(37_deg);
 
-    //drive->setState({0_in, 0_in, 0_deg});
-    //drive to smaLL goal
-    //drive->driveToPoint({3_ft, 0_ft});
-    //deploy cubes
-    leftDrive.moveVoltage(6000);
-    rightDrive.moveVoltage(6000);
-    pros::delay(700);
+    drive->setMaxVelocity(40);
+    drive->moveDistance(10_in);
 
-    leftDrive.moveVoltage(0);
-    rightDrive.moveVoltage(0);
-
-    stopIntake();
-    Outtake();
-    pros::delay(300);
-    stopIntake();
     tiltForward();
-
-    pros::delay(3000);
-
+    pros::delay(500);
     stopTilter();
 
-    Outtake();
-    drive->moveDistance(-10_in);
+    liftArm();
+    pros::delay(500);
+    stopArm();
 
-    pros::delay(300);
+    drive->moveDistance(5_in);
 
-    tiltBack();
 
-    pros::delay(1000);
-
-    stopTilter();
-
-    drive->turnAngle(-130_deg);
-
-    drive->moveDistance(20_in);
-
-    Intake();
+    lowerArm();
+    pros::delay(500);
+    stopArm();
 
     pros::delay(400);
 
+
+    tiltForward();
+    pros::delay(800);
+    stopTilter();
+
+    Intakes.setBrakeMode(AbstractMotor::brakeMode::hold);
+
+    drive->setMaxVelocity(20);
+    drive->turnAngle(-125_deg);
+
+    drive->setMaxVelocity(30);
+    drive->moveDistance(28_in);
     stopIntake();
 
-    drive->moveDistance(-5_in);
+    Outtake();
+    pros::delay(400);
+    stopIntake();
 
+    tiltForward();
+    pros::delay(2600);
+    stopTilter();
+    pros::delay(400);
+    Outtake();
+    pros::delay(50);
+    drive->moveDistance(20_in);
+
+    tiltBack();
+    pros::delay(2100);
+    stopTilter();
+
+    stopIntake();
+    drive->turnAngle(-160_deg);
+
+
+
+    drive->moveDistance(18_in);
+    pros::delay(500);
+    Intake();
+    pros::delay(400);
+    stopIntake();
+
+
+
+        //drive->driveToPoint({1_ft, 0_ft});
 
 }
 void blueBackNew(){
@@ -563,6 +604,7 @@ void pushcube(){
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
+imu_sensor.reset();
 }
 
 /**
@@ -581,7 +623,8 @@ void disabled() {}
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {}
+void competition_initialize() {
+}
 
 void autonomous() {
 
@@ -591,7 +634,8 @@ void autonomous() {
   //redBack();
   //pushcube();
   //Skills();
-  blueBackNew();
+  //blueBackNew();
+  test();
 
 
   //drive->turnToAngle(-180_deg);
@@ -607,6 +651,7 @@ void autonomous() {
 
 void opcontrol() {
 	 while (true) {
+        printf("IMU get rotation: %f degrees\n", imu_sensor.get_rotation());
         deployMacro();
         driveSwap();
         driveControl();
