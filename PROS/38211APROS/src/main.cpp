@@ -449,8 +449,8 @@ void Skills(){
     stopArm();
 
     pros::delay(400);
-
-
+    stopIntake();
+    Intakes.setBrakeMode(AbstractMotor::brakeMode::hold);
     tiltForward();
     pros::delay(800);
     stopTilter();
@@ -464,8 +464,8 @@ void Skills(){
     drive->moveDistance(28_in);
     stopIntake();
 
-    Outtake();
-    pros::delay(400);
+    slowOuttake();
+    pros::delay(300);
     stopIntake();
 
     tiltForward();
@@ -633,9 +633,9 @@ void autonomous() {
   //blueBack();
   //redBack();
   //pushcube();
-  //Skills();
+  Skills();
   //blueBackNew();
-  test();
+  //test();
 
 
   //drive->turnToAngle(-180_deg);
