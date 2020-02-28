@@ -500,6 +500,9 @@ void Skills(){
 void blueBackNew(){
   //deploy the tray
   deployBack();
+  lowerArm();
+  pros::delay(200);
+  stopArm();
   //start intakes
   Intake();
   //intake 2 cubes
@@ -511,37 +514,38 @@ void blueBackNew(){
 
   pros::delay(100);
   //grab cube from middle tower
-  drive->moveDistance(11_in);
-  //back up a little so you can turn
-  drive->moveDistance(-5_in);
+  drive->moveDistance(7_in);
   //turn to grab the 4th cube
-  drive->turnAngle(180_deg);
+  drive->turnAngle(174_deg);
 
-  pros::delay(100);
   //move and grab the 4th cube
   drive->setMaxVelocity(60);
   drive->moveDistance(22_in);
+  Outtake();
+  pros::delay(300);
+  stopIntake();
   //start moving the tiler forward to save time
   tiltForward();
   //turn to face goal
   drive->setMaxVelocity(50);
-  drive->turnAngle(45_deg);
+  drive->turnAngle(42_deg);
   //index the cubes
-  slowOuttake();
+
   //line up for goal
   leftDrive.moveVoltage(3000);
   rightDrive.moveVoltage(3000);
 
   pros::delay(400);
 
-  stopIntake();
 
-  pros::delay(1000);
+
+  pros::delay(1200);
   //deploy cubes
   Outtake();
   //back up from the stack
   leftDrive.moveVoltage(-4000);
   rightDrive.moveVoltage(-4000);
+  stopTilter();
 
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -565,17 +569,15 @@ void redBackNew(){
   pros::delay(100);
   //grab cube from middle tower
   drive->moveDistance(7_in);
-  //back up a little so you can turn
-  drive->moveDistance(-1_in);
   //turn to grab the 4th cube
   drive->turnAngle(-174_deg);
 
   //move and grab the 4th cube
   drive->setMaxVelocity(60);
   drive->moveDistance(22_in);
-  slowOuttake();
-  pros::delay(200);
-
+  Outtake();
+  pros::delay(300);
+  stopIntake();
   //start moving the tiler forward to save time
   tiltForward();
   //turn to face goal
@@ -589,7 +591,7 @@ void redBackNew(){
 
   pros::delay(400);
 
-  stopIntake();
+
 
   pros::delay(1200);
   //deploy cubes
