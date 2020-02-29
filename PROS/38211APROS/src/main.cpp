@@ -12,7 +12,7 @@ pros::Controller master(pros::E_CONTROLLER_MASTER);
  Motor armMotor(-8);
  Motor intakeL(11);
  Motor intakeR(-1);
- pros::Motor Tilter(18, pros::E_MOTOR_GEARSET_36);
+ pros::Motor Tilter(17, pros::E_MOTOR_GEARSET_36);
 
 pros::Imu imu_sensor(IMU_PORT);
 
@@ -514,7 +514,7 @@ void blueBackNew(){
 
   pros::delay(100);
   //grab cube from middle tower
-  drive->moveDistance(7_in);
+  drive->moveDistance(6_in);
   //turn to grab the 4th cube
   drive->turnAngle(174_deg);
 
@@ -522,7 +522,7 @@ void blueBackNew(){
   drive->setMaxVelocity(60);
   drive->moveDistance(22_in);
   Outtake();
-  pros::delay(300);
+  pros::delay(400);
   stopIntake();
   //start moving the tiler forward to save time
   tiltForward();
@@ -542,10 +542,16 @@ void blueBackNew(){
   pros::delay(1200);
   //deploy cubes
   Outtake();
+  tiltBack();
   //back up from the stack
   leftDrive.moveVoltage(-4000);
   rightDrive.moveVoltage(-4000);
+  pros::delay(1200);
+  leftDrive.moveVoltage(0);
+  leftDrive.moveVoltage(0);
   stopTilter();
+
+  drive->turnAngle(-90_deg);
 
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -568,7 +574,7 @@ void redBackNew(){
 
   pros::delay(100);
   //grab cube from middle tower
-  drive->moveDistance(7_in);
+  drive->moveDistance(6_in);
   //turn to grab the 4th cube
   drive->turnAngle(-174_deg);
 
@@ -576,7 +582,7 @@ void redBackNew(){
   drive->setMaxVelocity(60);
   drive->moveDistance(22_in);
   Outtake();
-  pros::delay(300);
+  pros::delay(400);
   stopIntake();
   //start moving the tiler forward to save time
   tiltForward();
@@ -596,10 +602,16 @@ void redBackNew(){
   pros::delay(1200);
   //deploy cubes
   Outtake();
+  tiltBack();
   //back up from the stack
   leftDrive.moveVoltage(-4000);
   rightDrive.moveVoltage(-4000);
+  pros::delay(1200);
+  leftDrive.moveVoltage(0);
+  leftDrive.moveVoltage(0);
   stopTilter();
+
+  drive->turnAngle(90_deg);
 
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -698,8 +710,8 @@ void autonomous() {
   //blueBack();
   //redBack();
   //pushcube();
-  //Skills();
-  redBackNew();
+  Skills();
+  //redBackNew();
   //blueBackNew();
   //testIMU();
   //testOdom
