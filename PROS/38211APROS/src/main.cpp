@@ -115,6 +115,10 @@ void armControl(){
 void Intake(){
   Intakes.moveVoltage(12000);
 }
+
+void slowIntake(){
+  Intakes.moveVoltage(8500);
+}
 ////////////////////////////////////////////////////////////////////////////
 //Spin intakes outward
 ////////////////////////////////////////////////////////////////////////////
@@ -393,6 +397,12 @@ void Skills(){
     //deploy the tray
     deploy();
 
+    leftDrive.moveVoltage(-3000);
+    rightDrive.moveVoltage(-3000);
+    pros::delay(600);
+    leftDrive.moveVoltage(0);
+    rightDrive.moveVoltage(0);
+
     pros::delay(1000);
     //start intakes
     Intake();
@@ -406,10 +416,10 @@ void Skills(){
     drive->turnAngle(-37_deg);
     //drive to align with second line of cubes
     drive->setMaxVelocity(40);
-    drive->moveDistance(-25_in);
+    drive->moveDistance(-28_in);
     //turn to aligm woth second line of cubes pt.2 electric boogaloo
     drive->setMaxVelocity(20);
-    drive->turnAngle(37_deg);
+    drive->turnAngle(40_deg);
     //intake 2 cubes from the 2nd line
     drive->setMaxVelocity(40);
     drive->moveDistance(10_in);
@@ -417,18 +427,9 @@ void Skills(){
     tiltForward();
     pros::delay(500);
     stopTilter();
-    //lift arms up to grab the higher cubes
-    liftArm();
-    pros::delay(500);
-    stopArm();
-    //move forward and grab the higher cube
+    //move forward  cube
     drive->moveDistance(5_in);
-    //lower arm and grab lower cube
-    lowerArm();
-    pros::delay(500);
-    stopArm();
 
-    pros::delay(400);
     //stop intakes and set brake mode to hold
     stopIntake();
     Intakes.setBrakeMode(AbstractMotor::brakeMode::hold);
@@ -443,7 +444,13 @@ void Skills(){
     drive->turnAngle(-129_deg);
     //move forward to align with the small goal
     drive->setMaxVelocity(30);
-    drive->moveDistance(28_in);
+    drive->moveDistance(27_in);
+
+    leftDrive.moveVoltage(3000);
+    rightDrive.moveVoltage(3000);
+    pros::delay(1000);
+    leftDrive.moveVoltage(0);
+    rightDrive.moveVoltage(0);
     //outtake to properly index the cubes
     stopIntake();
     //slowOuttake();
@@ -451,7 +458,7 @@ void Skills(){
     stopIntake();
     //deploy the stack of cubes
     tiltForward();
-    pros::delay(2250);
+    pros::delay(2850);
     stopTilter();
     pros::delay(400);
     //outtake to index the bottom cube
@@ -461,15 +468,15 @@ void Skills(){
     drive->moveDistance(-9_in);
     //move the tilter back so the lift can move up
     tiltBack();
-    pros::delay(2100);
+    pros::delay(2300);
     stopTilter();
     stopIntake();
     //turn to face the medium tower
     drive->setMaxVelocity(40);
-    drive->turnAngle(-140_deg);
+    drive->turnAngle(-138_deg);
     //drive to the medium tower
-    Intake();
-    drive->moveDistance(17_in);
+    slowIntake();
+    drive->moveDistance(16_in);
     stopIntake();
     //intake the cube by the medium tower
 
@@ -477,7 +484,7 @@ void Skills(){
     drive->moveDistance(-5_in);
 
     liftArm();
-    pros::delay(1500);
+    pros::delay(1200);
     stopArm();
 
     leftDrive.moveVoltage(3000);
@@ -488,10 +495,40 @@ void Skills(){
 
 
     slowOuttake();
-    pros::delay(4000);
+    pros::delay(2000);
+    stopIntake();
+
+    drive->setMaxVelocity(50);
+    drive->moveDistance(-18_in);
+
+    drive->turnAngle(-90_deg);
+
+
+    lowerArm();
+    leftDrive.moveVoltage(-5000);
+    rightDrive.moveVoltage(-5000);
+    pros::delay(1200);
+    stopArm();
+    pros::delay(600);
+    leftDrive.moveVoltage(0);
+    rightDrive.moveVoltage(0);
+
+    slowIntake();
+
+    drive->moveDistance(32_in);
+    stopIntake();
+    drive->moveDistance(-3_in);
+
+    liftArm();
+    pros::delay(1000);
+    stopArm();
+
+    slowOuttake();
+    pros::delay(2000);
     stopIntake();
 
     drive->moveDistance(-5_in);
+
 
 }
 ////////////////////////////////////////////////////////////////////////////
