@@ -399,7 +399,7 @@ void Skills(){
 
     leftDrive.moveVoltage(-3000);
     rightDrive.moveVoltage(-3000);
-    pros::delay(600);
+    pros::delay(800);
     leftDrive.moveVoltage(0);
     rightDrive.moveVoltage(0);
 
@@ -419,7 +419,7 @@ void Skills(){
     drive->moveDistance(-28_in);
     //turn to aligm woth second line of cubes pt.2 electric boogaloo
     drive->setMaxVelocity(20);
-    drive->turnAngle(40_deg);
+    drive->turnAngle(41_deg);
     //intake 2 cubes from the 2nd line
     drive->setMaxVelocity(40);
     drive->moveDistance(10_in);
@@ -430,6 +430,7 @@ void Skills(){
     //move forward  cube
     drive->moveDistance(5_in);
 
+    pros::delay(200);
     //stop intakes and set brake mode to hold
     stopIntake();
     Intakes.setBrakeMode(AbstractMotor::brakeMode::hold);
@@ -441,7 +442,7 @@ void Skills(){
     Intakes.setBrakeMode(AbstractMotor::brakeMode::hold);
     //turn to align with the small goal
     drive->setMaxVelocity(20);
-    drive->turnAngle(-128_deg);
+    drive->turnAngle(-123_deg);
     //move forward to align with the small goal
     drive->setMaxVelocity(30);
     drive->moveDistance(27_in);
@@ -473,7 +474,7 @@ void Skills(){
     stopIntake();
     //turn to face the medium tower
     drive->setMaxVelocity(40);
-    drive->turnAngle(-138_deg);
+    drive->turnAngle(-137_deg);
     //drive to the medium tower
     slowIntake();
     drive->moveDistance(17_in);
@@ -484,7 +485,7 @@ void Skills(){
     drive->moveDistance(-5_in);
 
     liftArm();
-    pros::delay(1200);
+    pros::delay(1250);
     stopArm();
 
     leftDrive.moveVoltage(3000);
@@ -501,7 +502,7 @@ void Skills(){
     drive->setMaxVelocity(50);
     drive->moveDistance(-18_in);
 
-    drive->turnAngle(-90_deg);
+    drive->turnAngle(-87_deg);
 
 
     lowerArm();
