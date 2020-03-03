@@ -441,7 +441,7 @@ void Skills(){
     Intakes.setBrakeMode(AbstractMotor::brakeMode::hold);
     //turn to align with the small goal
     drive->setMaxVelocity(20);
-    drive->turnAngle(-129_deg);
+    drive->turnAngle(-128_deg);
     //move forward to align with the small goal
     drive->setMaxVelocity(30);
     drive->moveDistance(27_in);
@@ -476,7 +476,7 @@ void Skills(){
     drive->turnAngle(-138_deg);
     //drive to the medium tower
     slowIntake();
-    drive->moveDistance(16_in);
+    drive->moveDistance(17_in);
     stopIntake();
     //intake the cube by the medium tower
 
@@ -522,6 +522,8 @@ void Skills(){
     liftArm();
     pros::delay(1000);
     stopArm();
+
+    drive->moveDistance(2_in);
 
     slowOuttake();
     pros::delay(2000);
