@@ -397,22 +397,22 @@ void Skills(){
     //deploy the tray
     deploy();
 
-    leftDrive.moveVoltage(-3000);
-    rightDrive.moveVoltage(-3000);
+    leftDrive.moveVoltage(-4000);
+    rightDrive.moveVoltage(-4000);
     pros::delay(800);
     leftDrive.moveVoltage(0);
     rightDrive.moveVoltage(0);
 
-    pros::delay(1000);
+    pros::delay(800);
     //start intakes
     Intake();
     //drive forward and intake 5 cubes
-    drive->setMaxVelocity(40);
+    drive->setMaxVelocity(30);
     drive->moveDistance(30_in);
 
     pros::delay(300);
     //turn to align with second line of cubes
-    drive->setMaxVelocity(20);
+    drive->setMaxVelocity(30);
     drive->turnAngle(-37_deg);
     //drive to align with second line of cubes
     drive->setMaxVelocity(40);
@@ -442,7 +442,7 @@ void Skills(){
     Intakes.setBrakeMode(AbstractMotor::brakeMode::hold);
     //turn to align with the small goal
     drive->setMaxVelocity(20);
-    drive->turnAngle(-123_deg);
+    drive->turnAngle(-121_deg);
     //move forward to align with the small goal
     drive->setMaxVelocity(30);
     drive->moveDistance(27_in);
