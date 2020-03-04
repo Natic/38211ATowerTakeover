@@ -419,7 +419,7 @@ void Skills(){
     drive->moveDistance(-28_in);
     //turn to aligm woth second line of cubes pt.2 electric boogaloo
     drive->setMaxVelocity(20);
-    drive->turnAngle(41_deg);
+    drive->turnAngle(42.5_deg);
     //intake 2 cubes from the 2nd line
     drive->setMaxVelocity(40);
     drive->moveDistance(10_in);
@@ -474,7 +474,7 @@ void Skills(){
     stopIntake();
     //turn to face the medium tower
     drive->setMaxVelocity(40);
-    drive->turnAngle(-137_deg);
+    drive->turnAngle(-138_deg);
     //drive to the medium tower
     slowIntake();
     drive->moveDistance(17_in);
