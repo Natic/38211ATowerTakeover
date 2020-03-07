@@ -328,7 +328,7 @@ void redFront(){
   drive->moveDistance(-15_in);
   //turns to face the small goal
   drive->setMaxVelocity(30);
-  drive->turnAngle(132_deg);
+  drive->turnAngle(130_deg);
 
   pros::delay(200);
   //aligns for the goal using time as to not have the encoders get stuck
@@ -340,11 +340,55 @@ void redFront(){
   //moves the intakes to properly index the cubes
   stopIntake();
   Outtake();
+  tiltForward();
   pros::delay(300);
   stopIntake();
+
   //stacks the cubes
-  tiltForward();
   pros::delay(3000);
+  stopTilter();
+  Outtake();
+  //back away from the stack
+  drive->moveDistance(-10_in);
+}
+
+void redFrontSix(){
+  //deploys the tray
+  deploy();
+  //starts the intakes
+  Intake();
+  //moves forward to intake 5 cubes
+  drive->setMaxVelocity(60);
+  drive->moveDistance(30_in);
+
+  drive->turnAngle(-30_deg);
+
+  drive->moveDistance(6_in);
+
+  pros::delay(350);
+  stopIntake();
+  Intakes.setBrakeMode(AbstractMotor::brakeMode::hold);
+  drive->moveDistance(-6_in);
+  drive->turnAngle(30_deg);
+
+  drive->setMaxVelocity(100);
+  drive->moveDistance(-16_in);
+
+  tiltForward();
+  drive->setMaxVelocity(50);
+  drive->turnAngle(131_deg);
+
+  pros::delay(200);
+  //aligns for the goal using time as to not have the encoders get stuck
+  leftDrive.moveVoltage(4500);
+  rightDrive.moveVoltage(4500);
+  pros::delay(300);
+  stopIntake();
+  tiltForward();
+  pros::delay(400);
+  leftDrive.moveVoltage(0);
+  rightDrive.moveVoltage(0);
+  pros::delay(1400);
   stopTilter();
   Outtake();
   //back away from the stack
@@ -432,8 +476,7 @@ void Skills(){
 
     pros::delay(200);
     //stop intakes and set brake mode to hold
-    stopIntake();
-    Intakes.setBrakeMode(AbstractMotor::brakeMode::hold);
+
     //move tilter forward as to balance COG
     tiltForward();
     pros::delay(800);
@@ -445,15 +488,22 @@ void Skills(){
     drive->turnAngle(-121_deg);
     //move forward to align with the small goal
     drive->setMaxVelocity(30);
+
+
+
     drive->moveDistance(27_in);
+
 
     leftDrive.moveVoltage(3000);
     rightDrive.moveVoltage(3000);
-    pros::delay(1000);
+    slowOuttake();
+    pros::delay(700);
+    stopIntake();
+    pros::delay(300);
     leftDrive.moveVoltage(0);
     rightDrive.moveVoltage(0);
-    //outtake to properly index the cubes
-    stopIntake();
+
+
     //slowOuttake();
     pros::delay(250);
     stopIntake();
@@ -556,7 +606,7 @@ void blueBackNew(){
   //grab cube from middle tower
   drive->moveDistance(6_in);
   //turn to grab the 4th cube
-  drive->turnAngle(174_deg);
+  drive->turnAngle(178_deg);
 
   //move and grab the 4th cube
   drive->setMaxVelocity(60);
@@ -568,7 +618,7 @@ void blueBackNew(){
   tiltForward();
   //turn to face goal
   drive->setMaxVelocity(50);
-  drive->turnAngle(42_deg);
+  drive->turnAngle(46_deg);
   //index the cubes
 
   //line up for goal
@@ -616,7 +666,7 @@ void redBackNew(){
   //grab cube from middle tower
   drive->moveDistance(6_in);
   //turn to grab the 4th cube
-  drive->turnAngle(-174_deg);
+  drive->turnAngle(-178_deg);
 
   //move and grab the 4th cube
   drive->setMaxVelocity(60);
@@ -628,7 +678,7 @@ void redBackNew(){
   tiltForward();
   //turn to face goal
   drive->setMaxVelocity(50);
-  drive->turnAngle(-42_deg);
+  drive->turnAngle(-46_deg);
   //index the cubes
 
   //line up for goal
@@ -652,6 +702,7 @@ void redBackNew(){
   stopTilter();
 
   drive->turnAngle(90_deg);
+
 
 }
 ////////////////////////////////////////////////////////////////////////////
@@ -750,8 +801,9 @@ void autonomous() {
   //blueBack();
   //redBack();
   //pushcube();
-  Skills();
-  //redBackNew();
+  //Skills();
+  //redFrontSix();
+  redBackNew();
   //blueBackNew();
   //testIMU();
   //testOdom
