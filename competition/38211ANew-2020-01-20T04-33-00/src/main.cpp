@@ -39,9 +39,9 @@ int tilterRetract = 400;
 double kP = 0.0001;
 double kI = 0.000001;
 double kD = 0.3;
-double turnkP = 0.0;
+double turnkP = 0.0001;
 double turnkI = 0.0;
-double turnkD = 0.0;
+double turnkD = 0.2;
 
 //auto settings
 int desiredValue = 200;
